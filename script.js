@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ======================================================
     // ===== LÓGICA DEL CARRUSEL (COVER FLOW) ===============
     // ======================================================
+    const coverflowContainer = document.querySelector('.coverflow-container');
     const albums = document.querySelectorAll('.album');
     const totalAlbums = albums.length;
-    // Inicia en el primer álbum si la pantalla es pequeña, o en el medio si es grande
     let currentIndex = window.innerWidth <= 768 ? 0 : (totalAlbums > 2 ? Math.floor(totalAlbums / 2) : 0);
 
     function updateCoverflow() {
@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Lógica para la rueda del mouse (scroll) ---
-    document.querySelector('.coverflow-container').addEventListener('wheel', (e) => {
+    // --- Lógica para la rueda del mouse (desktop) ---
+    coverflowContainer.addEventListener('wheel', (e) => {
         e.preventDefault();
         if (e.deltaY > 0) {
             if (currentIndex < totalAlbums - 1) {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Lógica para la navegación con teclado ---
+    // --- Lógica para la navegación con teclado (desktop) ---
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
             if (currentIndex < totalAlbums - 1) {
@@ -74,27 +74,56 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+    
+    // --- NUEVO: Lógica para gestos táctiles (swipes en móvil) ---
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    coverflowContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    coverflowContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50; // Mínima distancia para considerarse un swipe
+        // Swipe hacia la derecha (álbum anterior)
+        if (touchEndX > touchStartX + swipeThreshold) {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCoverflow();
+            }
+        } 
+        // Swipe hacia la izquierda (álbum siguiente)
+        else if (touchEndX < touchStartX - swipeThreshold) {
+            if (currentIndex < totalAlbums - 1) {
+                currentIndex++;
+                updateCoverflow();
+            }
+        }
+    }
 
     // Estado inicial del carrusel
     updateCoverflow();
-
 
     // ======================================================
     // ===== ANIMACIÓN DE ENTRADA PARA SECCIÓN DE VIDEO =====
     // ======================================================
     const extraSection = document.querySelector('.extra-section');
 
-    if (extraSection) { // Nos aseguramos de que la sección exista
+    if (extraSection) {
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     extraSection.classList.add('visible');
-                    // Opcional: dejamos de observar una vez que es visible
-                    sectionObserver.unobserve(extraSection); 
+                    sectionObserver.unobserve(extraSection);
                 }
             });
         }, {
-            threshold: 0.1 // La animación se activa cuando el 10% de la sección es visible
+            threshold: 0.1
         });
         
         sectionObserver.observe(extraSection);
