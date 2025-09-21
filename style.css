@@ -1,0 +1,237 @@
+body {
+    background-color: #551a1a;
+    color: #ebe6e6;
+    font-family: 'Franklin Gothic Medium';
+    text-align: center;
+    margin: 0;
+    padding: 2rem;
+    overflow-x: hidden;
+}
+
+h1, .date-title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.subtitle {
+    font-family: 'Courier New', Courier, monospace; /* Una fuente que simula máquina de escribir */
+    font-size: 1.1rem;
+    font-weight: normal; /* No lo queremos en negrita */
+    color: #fda000; /* Usamos el color secundario para un look más sutil */
+    margin-top: 20px; /* Pequeño espacio superior */
+    margin-bottom: 0; /* Espacio inferior para separarlo del carrusel */
+    letter-spacing: 1px; /* Un poco de espacio entre letras */
+}
+
+.date-title {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.coverflow-container {
+    padding: 0;
+    perspective: 1200px;
+    position: relative;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Solución de superposición */
+    z-index: 1;
+}
+
+.coverflow {
+    transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.album {
+    width: 250px;
+    height: 330px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    /* Colores actualizados para tema claro */
+    box-shadow: 0 10px 30px rgba(92, 85, 73, 0.4);
+    border-radius: 8px;
+    background: #000000;
+    -webkit-box-reflect: below 5px linear-gradient(transparent, transparent, rgba(0,0,0,0.2));
+    /* Estilo para interactividad */
+    cursor: pointer;
+}
+
+.album img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Estilo para que el enlace no se vea como un link tradicional */
+.album a {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+
+.album-info {
+    padding: 15px;
+    text-align: left;
+    transition: opacity 0.5s ease;
+}
+
+.album-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    /* Colores actualizados para tema claro */
+    color: #ffffff;
+}
+
+.album-info p {
+    margin: 5px 0 0;
+    font-size: 0.85rem;
+    /* Colores actualizados para tema claro */
+    color: #ffffff;
+}
+
+.album:not(.active) .album-info {
+    opacity: 0;
+}
+
+/* --- ESTILOS PARA LA NUEVA SECCIÓN DE VIDEO Y NOTA --- */
+
+.extra-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 1000px auto 50px auto; /* Puedes ajustar 300px a lo que prefieras */
+    padding: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    position: relative;
+    z-index: 2;
+}
+
+.extra-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.video-container {
+    flex: 1.5;
+}
+
+.video-container video {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(92, 85, 73, 0.4);
+}
+
+.note-container {
+    flex: 1;
+    text-align: left;
+}
+
+.note-container h2 {
+    font-size: 1.8rem;
+    color: #ddcccc;
+    margin-bottom: 1rem;
+}
+
+.note-container p {
+    font-size: 1rem;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* --- MEDIA QUERIES PARA RESPONSIVIDAD (MÓVILES) --- */
+
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    h1, .date-title {
+        font-size: 1.8rem;
+    }
+
+    .date-title {
+        font-size: 1.5rem;
+    }
+
+    .coverflow-container {
+        height: 300px;
+    }
+
+    .album {
+        width: 180px;
+        height: 250px;
+    }
+
+    .album img {
+        height: 180px;
+    }
+
+    .album-info {
+        padding: 10px;
+    }
+
+    .album-info h4 {
+        font-size: 0.9rem;
+    }
+
+    .album-info p {
+        font-size: 0.75rem;
+    }
+
+    .extra-section {
+        flex-direction: column;
+        gap: 2rem;
+        margin: 150px auto 30px auto; /* Por ejemplo, 150px para móvil */
+        padding: 1rem;
+    }
+
+    .video-container,
+    .note-container {
+        flex: none;
+        width: 90%;
+        max-width: 350px;
+    }
+
+    .note-container {
+        text-align: center;
+    }
+
+    .note-container h3 {
+        font-size: 1.5rem;
+    }
+
+    .note-container p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .album {
+        width: 150px;
+        height: 220px;
+    }
+
+    .album img {
+        height: 150px;
+    }
+
+    .coverflow-container {
+        height: 270px;
+    }
+}
